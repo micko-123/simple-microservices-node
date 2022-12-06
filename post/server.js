@@ -1,17 +1,14 @@
 const express = require('express')
 const cors = require('cors')
+const { randomByte } = require('crypto')
 
 const app = express()
 const PORT = 5000
 app.use(express.json())
 app.use(cors())
 
-const posts = [
-    {
-        id: 12,
-        title: 'First post'
-    }
-]
+const posts = {}
+
 
 app.get('/post', (req, res)=>{
 
@@ -19,9 +16,10 @@ app.get('/post', (req, res)=>{
 })
 
 app.post('/', (req, res)=>{
-    const post = req.body
+    const {post} = req.body
+    const id = randomByte(2).toString('hex')
+    posts[id] = post
     
-    posts.push(post)
     res.status(201).json(posts)
 })
 app.listen(PORT, ()=>{

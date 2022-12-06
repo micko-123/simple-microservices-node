@@ -7,14 +7,7 @@ const PORT = 5000
 app.use(express.json())
 app.use(cors())
 
-const comments = [
-    {
-        id:23,
-        postId: 12,
-        content: 'first commmet'
-     }
-    
-]
+const comments = {}
 
 app.get('/comment', (req, res)=>{
     
@@ -24,9 +17,10 @@ app.get('/comment', (req, res)=>{
 
 app.post('/comment', (req,res)=>{
 
-    const comment = req.body
-    comments.push(comment)
-
+    const {comment} = req.body
+    const id = randomByte(2).toString('hex')
+    comments[id] = comment
+    
     res.status(201).json(comments)
 })
 
