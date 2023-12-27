@@ -1,21 +1,22 @@
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useEffect, useState } from "react";
-import CreateComment from "../comment/CreateComment";
+import CommentCreate from "./CommentCreate";
+import CommentList from "./CommentList";
 
-function GetPost() {
+const PostList = () => {
   const [posts, setPosts] = useState({});
 
   const fetchPosts = async () => {
-    const data = await axios.get("http://localhost:5000/posts");
+    const res = await axios.get("http://localhost:4002/posts");
 
-    setPosts(data.data);
+    setPosts(res.data);
   };
 
   useEffect(() => {
     fetchPosts();
   }, []);
 
-  const renderedPost = Object.values(posts).map((post) => {
+  const renderedPosts = Object.values(posts).map((post) => {
     return (
       <div
         className="card"
@@ -24,17 +25,18 @@ function GetPost() {
       >
         <div className="card-body">
           <h3>{post.title}</h3>
-          <CreateComment postId={post.id} />
+          <CommentList comments={post.comments} />
+          <CommentCreate postId={post.id} />
         </div>
       </div>
     );
   });
-  console.log(renderedPost);
+
   return (
     <div className="d-flex flex-row flex-wrap justify-content-between">
-      {renderedPost}
+      {renderedPosts}
     </div>
   );
-}
+};
 
-export default GetPost;
+export default PostList;
